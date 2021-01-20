@@ -38,6 +38,5 @@ def science_news():
     return main_headlines, main_subheadlines, side_titles, side_info, href #,main_image
 
 
-print(science_news())
-
-
+main_headlines, main_subheadlines, side_titles, side_info, href = science_news()
+print(main_headlines)
