@@ -46,4 +46,4 @@ def get_news():
     return main_image_link, main_headlines, main_subheadlines, side_titles, side_info, href
 
 
-print(get_news())
+
