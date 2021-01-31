@@ -38,3 +38,38 @@ def politics_get_news(place, num):
     links = get_links(search_results, num)
 
     return headlines, subheadlines, links
+
+def daily_headlines(page):
+    headlines = page.find('h3').text.strip()
+    return headlines
+
+def daily_info(page):
+    info = page.find('a', class_='text text-link styles-text').text.strip()
+    return info
+
+def daily_link(page):
+    link = page.find('a').get('href')
+    return link
+
+def daily_image(page):
+    image = page.find('a')
+    img = image.get('style')[23:120]
+    return img
+
+def daily_politics_news():
+    url = 'https://www.worldpoliticsreview.com/'
+    news_page = requests.get(url)
+    page = bs(news_page.text, 'html.parser')
+    daily_news_block = page.find('div', class_='box col-sm-6 col-lg-4 table-cell')
+    headlines = daily_headlines(daily_news_block)
+    info = daily_info(daily_news_block)
+    link = url + daily_link(daily_news_block)
+    image = daily_image(daily_news_block)
+
+    return headlines, info, link, image
+
+
+
+
+
+    

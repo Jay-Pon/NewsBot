@@ -23,15 +23,21 @@ def getHeadlines(article_box, num):
 
     return sub_headers, links
 
+def get_image(main_page, num):
+    image = main_page.find_all('img', limit=num)
+    image_link = image[1].get('src')
+    return image_link
+
 def getPage():
     url = 'https://techcrunch.com/'
-    main_page = bs(requests.get(url).text, 'lxml-xml')
+    main_page = bs(requests.get(url).text, 'html.parser')
     return main_page
 
-def tech_get_news(num):
+def daily_tech_news(num):
     page = getPage()
     titles, links = getHeadlines(page, num)
     info = getInfo(page, num)
+    image_src = get_image(page, num)
 
-    return titles, links, info
+    return titles, links, info, image_src
 
