@@ -34,7 +34,7 @@ def sub_links(news_page, num):
         href.append("https://www.bbc.com/" + link.get('href'))
     return href
 
-def science_daily_get_news(num):
+def daily_science_news(num):
     url = 'https://www.bbc.com/news/science_and_environment'
     page = requests.get(url)
     news_page = bs(page.text, 'html.parser')
@@ -49,7 +49,41 @@ def science_daily_get_news(num):
 
     return main_image_link, main_headlines, main_subheadlines, side_titles, side_info, href
 
+def get_headlines(page, num):
+    headlines = []
+    hl = page.find_all('h3', class_='post-item-river__title___J3spU', limit=num)
+    for headline in hl:
+        headlines.append(headline.text.strip())
+    return headlines
+
+def get_subheadlines(page, num):
+    subheadlines = []
+    subhl = page.find_all('p', class_='post-item-river__excerpt___3ok6B', limit=num)
+    for subheadline in subhl:
+        subheadlines.append(subheadline.text.strip())
+    return subheadlines
+
+def get_links(page, num):
+    links = []
+    figure = page.find_all('figure', class_='post-item-river__figure___122wY', limit=num)
+    for i in range(num):
+        links.append(figure[i].find('a').get('href'))
+    return links
+
+def get_image(page):
+    image = page.find('img')
+    img = image.get('src')
+    return img
+
+
 def science_get_news(keyword, num):
-    #get news from a search page with a keyword query
-    #get article name, subhead if applicable, possible image link. and link to article
-    pass
+    url = 'https://www.sciencenews.org/?s='
+    search_query = keyword.lower()
+    result_page = requests.get(url + search_query)
+    news_page = bs(result_page.text, 'html.parser')
+    headlines = get_headlines(news_page, num)
+    subheadlines = get_subheadlines(news_page, num)
+    links = get_links(news_page, num)
+    image = get_image(news_page)
+
+    return headlines, subheadlines, links, image

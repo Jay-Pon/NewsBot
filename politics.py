@@ -27,7 +27,7 @@ def get_links(search_results, num):
 
 #make a function to scrape from homepage without query
 
-def politics_get_news(place, num):
+def get_politics_news(place, num):
     url = 'https://www.worldpoliticsreview.com/search?query='
     search_query = place.lower()
     result_page = requests.get(url + search_query)

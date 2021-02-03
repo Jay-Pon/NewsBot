@@ -41,3 +41,6 @@ def daily_tech_news(num):
 
     return titles, links, info, image_src
 
+#def get_tech_news(keyword, number):
+    
+

@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands, tasks
 from itertools import cycle
-from politics import daily_politics_news
-from science import science_daily_get_news
+from politics import daily_politics_news, get_politics_news
+from science import daily_science_news, science_get_news
 from tech import daily_tech_news
 from entertainment import daily_entertainment_news
 
@@ -48,49 +48,49 @@ async def news(ctx, genre, keyword, number = 5):
         await client.TECH_CHANNEL.send(embed = embed)
 
     elif genre == 'science':
-        mi, mh, msh, st, si, sh = science_daily_get_news(1)
+        mh, sh, l, img = science_get_news(keyword, number)
+        for i in range(number):
+            embed = discord.Embed(
+                title = mh[i],
+                colour = discord.Colour.blue()
+            )
 
-        embed = discord.Embed(
-            title = mh,
-            colour = discord.Colour.blue()
-        )
+            embed.add_field(name = "_" * 256, value = sh[i], inline=False)
+            embed.add_field(name = "_" * 256, value = l[i], inline=False)
 
-        embed.add_field(name = "_" * 256, value = msh, inline=False)
-        embed.set_image(url = mi)
-
-        await client.SCIENCE_CHANNEL.send(embed = embed)
+            await client.SCIENCE_CHANNEL.send(embed = embed)
 
     elif genre == 'politics':
-        h, i, l, img = daily_politics_news()
+        h, sh, l = get_politics_news(keyword, number)
+        for i in range(number):
+            embed = discord.Embed(
+                title = h[i],
+                colour = discord.Colour.blue()
+            )
 
-        embed = discord.Embed(
-            title = h,
-            colour = discord.Colour.blue()
-        )
+            embed.add_field(name = "_" * 256, value = sh[i], inline=False)
+            embed.add_field(name = "_" * 256, value = l[i], inline=False)
 
-        embed.add_field(name = "_" * 256, value = i, inline=False)
-        embed.set_image(url = img)
-
-        await client.POLI_CHANNEL.send(embed = embed)
+            await client.POLI_CHANNEL.send(embed = embed)
 
     elif genre == 'entertainment':
-        h, l, i = daily_entertainment_news(1)
+        h, l, sh = daily_entertainment_news(number)
+        for i in range(number):
+            embed = discord.Embed(
+                title = h[i],
+                colour = discord.Colour.blue()
+            )
 
-        embed = discord.Embed(
-            title = h[0],
-            colour = discord.Colour.blue()
-        )
+            embed.add_field(name = "_" * 256, value = sh[i], inline=False)
+            embed.add_field(name = "_" * 256, value = l[i], inline=False)
 
-        embed.add_field(name = "_" * 256, value = l[0], inline=False)
-        embed.set_image(url = i[0])
-
-        await client.ENT_CHANNEL.send(embed = embed)
+            await client.ENT_CHANNEL.send(embed = embed)
     else:
         await ctx.send("Enter an appropriate category!")
 
 @tasks.loop(hours = 24)
 async def daily_science():
-    mi, mh, msh, st, si, sh = science_daily_get_news(1)
+    mi, mh, msh, st, si, sh = daily_science_news(1)
 
     embed = discord.Embed(
         title = mh,
@@ -158,7 +158,7 @@ async def setup(ctx):
 
 #make set up command
 
-client.run('ODAwNzQ2NzM3ODg2ODIyNDMw.YAWngw.Vo53iCVE-44RwtFCahzpteph_Z8')
+client.run('ODAwNzQ2NzM3ODg2ODIyNDMw.YAWngw.DwmJjYMGGKBFOXtLIgTMZJzGkkU')
 
 
 
@@ -197,7 +197,7 @@ async def daily_test(ctx, genre, keyword, number = 5):
         await client.TECH_CHANNEL.send(embed = embed)
 
     elif genre == 'science':
-        mi, mh, msh, st, si, sh = science_daily_get_news(1)
+        mi, mh, msh, st, si, sh = daily_science_news(1)
 
         embed = discord.Embed(
             title = mh,
